@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SwipeStack">
+        <attr name="animation_duration" format="integer"/>
+        <attr name="stack_size" format="integer"/>
+        <attr name="stack_spacing" format="dimension"/>
+        <attr name="stack_rotation" format="integer"/>
+        <attr name="swipe_rotation" format="float"/>
+        <attr name="swipe_opacity" format="float"/>
+        <attr name="disable_hw_acceleration" format="boolean"/>
+    </declare-styleable>
+</resources>

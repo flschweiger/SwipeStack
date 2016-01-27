@@ -1,0 +1,38 @@
+apply plugin: 'com.android.library'
+apply plugin: 'bintray-release'
+
+def final String VERSION_NAME = "0.1.0"
+def final int VERSION_CODE = 1
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode VERSION_CODE
+        versionName VERSION_NAME
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+}
+
+publish {
+    userOrg = 'flschweiger'
+    groupId = 'link.fls'
+    artifactId = 'swipestack'
+    publishVersion = VERSION_NAME
+    desc = 'A swipeable stack view for Android.'
+    website = 'https://github.com/flschweiger/SwipeStack'
+}
