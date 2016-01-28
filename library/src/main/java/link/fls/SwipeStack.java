@@ -246,7 +246,7 @@ public class SwipeStack extends ViewGroup {
         }
 
         if (getChildCount() == 0) {
-            mListener.onStackEmpty();
+            if (mListener != null) mListener.onStackEmpty();
         }
     }
 
