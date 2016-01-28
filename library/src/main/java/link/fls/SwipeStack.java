@@ -22,6 +22,7 @@ import android.database.DataSetObserver;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -279,61 +280,143 @@ public class SwipeStack extends ViewGroup {
         removeTopView();
     }
 
+    /**
+     * Returns the current adapter position.
+     *
+     * @return The current position.
+     */
     public int getCurrentPosition() {
         return mCurrentViewIndex - getChildCount();
     }
 
+    /**
+     * Returns the adapter currently in use in this SwipeStack.
+     *
+     * @return The adapter currently used to display data in this SwipeStack.
+     */
     public Adapter getAdapter() {
         return mAdapter;
     }
 
-    public void setAdapter(Adapter pAdapter) {
+    /**
+     * Sets the data behind this SwipeView.
+     *
+     * @param adapter The Adapter which is responsible for maintaining the
+     *                data backing this list and for producing a view to represent an
+     *                item in that data set.
+     * @see #getAdapter()
+     */
+    public void setAdapter(Adapter adapter) {
         if (mAdapter != null) mAdapter.unregisterDataSetObserver(mDataObserver);
-        mAdapter = pAdapter;
+        mAdapter = adapter;
         mAdapter.registerDataSetObserver(mDataObserver);
     }
 
-    public void setListener(SwipeStackListener listener) {
+    /**
+     * Register a callback to be invoked when the user has swiped the top view
+     * left / right or when the stack gets empty.
+     *
+     * @param listener The callback that will run
+     */
+    public void setListener(@Nullable SwipeStackListener listener) {
         mListener = listener;
     }
 
-    public void setSwipeProgressListener(SwipeProgressListener listener) {
+    /**
+     * Register a callback to be invoked when the user starts / stops interacting
+     * with the top view of the stack.
+     *
+     * @param listener The callback that will run
+     */
+    public void setSwipeProgressListener(@Nullable SwipeProgressListener listener) {
         mProgressListener = listener;
     }
 
+    /**
+     * Get the view from the top of the stack.
+     *
+     * @return The view if the stack is not empty or null otherwise.
+     */
     public View getTopView() {
         return mTopView;
     }
 
+    /**
+     * Programmatically dismiss the top view to the right.
+     */
     public void swipeTopViewToRight() {
         if (getChildCount() == 0) return;
         mSwipeHelper.swipeViewToRight();
     }
 
+    /**
+     * Programmatically dismiss the top view to the left.
+     */
     public void swipeTopViewToLeft() {
         if (getChildCount() == 0) return;
         mSwipeHelper.swipeViewToLeft();
     }
 
+    /**
+     * Resets the current adapter position and repopulates the stack.
+     */
     public void resetStack() {
         mCurrentViewIndex = 0;
         removeAllViewsInLayout();
         requestLayout();
     }
 
+    /**
+     * Interface definition for a callback to be invoked when the top view was
+     * swiped to the left / right or when the stack gets empty.
+     */
     public interface SwipeStackListener {
+        /**
+         * Called when a view has been dismissed to the left.
+         *
+         * @param position The position of the view in the adapter currently in use.
+         */
         void onViewSwipedToLeft(int position);
 
+        /**
+         * Called when a view has been dismissed to the right.
+         *
+         * @param position The position of the view in the adapter currently in use.
+         */
         void onViewSwipedToRight(int position);
 
+        /**
+         * Called when the last view has been dismissed.
+         */
         void onStackEmpty();
     }
 
+    /**
+     * Interface definition for a callback to be invoked when the user
+     * starts / stops interacting with the top view of the stack.
+     */
     public interface SwipeProgressListener {
+        /**
+         * Called when the user starts interacting with the top view of the stack.
+         *
+         * @param position The position of the view in the currently set adapter.
+         */
         void onSwipeStart(int position);
 
+        /**
+         * Called when the user is dragging the top view of the stack.
+         *
+         * @param position The position of the view in the currently set adapter.
+         * @param progress Represents the horizontal dragging position in relation to
+         *                 the start position of the drag.
+         */
         void onSwipeProgress(int position, float progress);
 
+        /**
+         * Called when the user has stopped interacting with the top view of the stack.
+         *
+         * @param position The position of the view in the currently set adapter.
+         */
         void onSwipeEnd(int position);
     }
 }
