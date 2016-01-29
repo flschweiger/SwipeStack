@@ -39,6 +39,7 @@ public class SwipeStack extends ViewGroup {
     public static final int DEFAULT_STACK_ROTATION = 8;
     public static final float DEFAULT_SWIPE_ROTATION = 30;
     public static final float DEFAULT_SWIPE_OPACITY = 1;
+    public static final float DEFAULT_SCALE_FACTOR = 1f;
     public static final boolean DEFAULT_DISABLE_HW_ACCELERATION = true;
 
     private static final String KEY_SUPER_STATE = "superState";
@@ -54,6 +55,7 @@ public class SwipeStack extends ViewGroup {
     private int mViewRotation;
     private float mSwipeRotation;
     private float mSwipeOpacity;
+    private float mScaleFactor;
     private boolean mDisableHwAcceleration;
     private boolean mIsFirstLayout = true;
 
@@ -94,6 +96,8 @@ public class SwipeStack extends ViewGroup {
                     attrs.getFloat(R.styleable.SwipeStack_swipe_rotation, DEFAULT_SWIPE_ROTATION);
             mSwipeOpacity =
                     attrs.getFloat(R.styleable.SwipeStack_swipe_opacity, DEFAULT_SWIPE_OPACITY);
+            mScaleFactor =
+                    attrs.getFloat(R.styleable.SwipeStack_scale_factor, DEFAULT_SCALE_FACTOR);
             mDisableHwAcceleration =
                     attrs.getBoolean(R.styleable.SwipeStack_disable_hw_acceleration,
                             DEFAULT_DISABLE_HW_ACCELERATION);
@@ -194,9 +198,7 @@ public class SwipeStack extends ViewGroup {
     }
 
     private void reorderItems() {
-        int childCount = getChildCount();
-
-        for (int x = 0; x < childCount; x++) {
+        for (int x = 0; x < getChildCount(); x++) {
             View childView = getChildAt(x);
 
             int childX = (getWidth() - childView.getMeasuredWidth()) / 2;
@@ -213,22 +215,30 @@ public class SwipeStack extends ViewGroup {
             boolean isNewView = (boolean) childView.getTag(R.id.new_view);
             float distanceToViewAbove = ((getChildCount() - 1) * mViewSpacing) - (x * mViewSpacing);
             float newPositionY = distanceToViewAbove + getPaddingTop();
+            float scaleFactor = (float) Math.pow(mScaleFactor, getChildCount() - x);
 
             if (!mIsFirstLayout) {
 
                 if (isNewView) {
                     childView.setTag(R.id.new_view, false);
                     childView.setAlpha(0);
+                    childView.setY(newPositionY);
+                    childView.setScaleY(scaleFactor);
+                    childView.setScaleX(scaleFactor);
                 }
 
                 childView.animate()
                         .y(newPositionY)
+                        .scaleX(scaleFactor)
+                        .scaleY(scaleFactor)
                         .alpha(1)
                         .setDuration(mAnimationDuration);
 
             } else {
                 childView.setTag(R.id.new_view, false);
                 childView.setY(newPositionY);
+                childView.setScaleY(scaleFactor);
+                childView.setScaleX(scaleFactor);
             }
         }
     }
