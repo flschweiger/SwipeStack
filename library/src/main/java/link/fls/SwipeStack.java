@@ -162,7 +162,6 @@ public class SwipeStack extends ViewGroup {
         }
 
         reorderItems();
-        setupTopView();
 
         mIsFirstLayout = false;
     }
@@ -190,7 +189,18 @@ public class SwipeStack extends ViewGroup {
                         FrameLayout.LayoutParams.WRAP_CONTENT);
             }
 
-            bottomView.measure(MeasureSpec.EXACTLY | width, MeasureSpec.EXACTLY | height);
+            int measureSpecWidth = MeasureSpec.AT_MOST;
+            int measureSpecHeight = MeasureSpec.AT_MOST;
+
+            if (params.width == LayoutParams.MATCH_PARENT) {
+                measureSpecWidth = MeasureSpec.EXACTLY;
+            }
+
+            if (params.height == LayoutParams.MATCH_PARENT) {
+                measureSpecHeight = MeasureSpec.EXACTLY;
+            }
+
+            bottomView.measure(measureSpecWidth | width, measureSpecHeight | height);
             addViewInLayout(bottomView, 0, params, true);
 
             mCurrentViewIndex++;
@@ -200,12 +210,16 @@ public class SwipeStack extends ViewGroup {
     private void reorderItems() {
         for (int x = 0; x < getChildCount(); x++) {
             View childView = getChildAt(x);
+            int topViewIndex = getChildCount() - 1;
 
-            int childX = (getWidth() - childView.getMeasuredWidth()) / 2;
+            int distanceToViewAbove = (topViewIndex * mViewSpacing) - (x * mViewSpacing);
+            int newPositionX = (getWidth() - childView.getMeasuredWidth()) / 2;
+            int newPositionY = distanceToViewAbove + getPaddingTop();
+
             childView.layout(
-                    childX,
+                    newPositionX,
                     getPaddingTop(),
-                    childX + childView.getMeasuredWidth(),
+                    newPositionX + childView.getMeasuredWidth(),
                     getPaddingTop() + childView.getMeasuredHeight());
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -213,9 +227,13 @@ public class SwipeStack extends ViewGroup {
             }
 
             boolean isNewView = (boolean) childView.getTag(R.id.new_view);
-            float distanceToViewAbove = ((getChildCount() - 1) * mViewSpacing) - (x * mViewSpacing);
-            float newPositionY = distanceToViewAbove + getPaddingTop();
             float scaleFactor = (float) Math.pow(mScaleFactor, getChildCount() - x);
+
+            if (x == topViewIndex) {
+                mSwipeHelper.unregisterObservedView();
+                mTopView = childView;
+                mSwipeHelper.registerObservedView(mTopView, newPositionX, newPositionY);
+            }
 
             if (!mIsFirstLayout) {
 
@@ -241,12 +259,6 @@ public class SwipeStack extends ViewGroup {
                 childView.setScaleX(scaleFactor);
             }
         }
-    }
-
-    private void setupTopView() {
-        mSwipeHelper.unregisterObservedView();
-        mTopView = getChildAt(getChildCount() - 1);
-        mSwipeHelper.registerObservedView(mTopView);
     }
 
     private void removeTopView() {

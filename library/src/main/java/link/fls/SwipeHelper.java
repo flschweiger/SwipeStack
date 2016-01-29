@@ -31,6 +31,8 @@ public class SwipeHelper implements View.OnTouchListener {
     private boolean mListenForTouchEvents;
     private float mDownX;
     private float mDownY;
+    private float mInitialX;
+    private float mInitialY;
     private int mPointerId;
 
     private float mRotateDegrees = SwipeStack.DEFAULT_SWIPE_ROTATION;
@@ -68,8 +70,9 @@ public class SwipeHelper implements View.OnTouchListener {
                 mObservedView.setX(newX);
                 mObservedView.setY(newY);
 
-                float dragDistanceX = newX - mSwipeStack.getPaddingLeft();
-                float swipeProgress = dragDistanceX / mSwipeStack.getWidth();
+                float dragDistanceX = newX - mInitialX;
+                float swipeProgress = Math.min(Math.max(
+                        dragDistanceX / mSwipeStack.getWidth(), -1), 1);
 
                 mSwipeStack.onSwipeProgress(swipeProgress);
 
@@ -113,8 +116,8 @@ public class SwipeHelper implements View.OnTouchListener {
 
     private void resetViewPosition() {
         mObservedView.animate()
-                .x(mSwipeStack.getPaddingLeft())
-                .y(mSwipeStack.getPaddingTop())
+                .x(mInitialX)
+                .y(mInitialY)
                 .rotation(0)
                 .alpha(1)
                 .setDuration(mAnimationDuration)
@@ -127,8 +130,9 @@ public class SwipeHelper implements View.OnTouchListener {
         mListenForTouchEvents = false;
         mObservedView.animate().cancel();
         mObservedView.animate()
-                .x(-mSwipeStack.getWidth())
+                .x(-mSwipeStack.getWidth() + mObservedView.getX())
                 .rotation(-mRotateDegrees)
+                .alpha(0f)
                 .setDuration(duration)
                 .setListener(new AnimationUtils.AnimationEndListener() {
                     @Override
@@ -143,8 +147,9 @@ public class SwipeHelper implements View.OnTouchListener {
         mListenForTouchEvents = false;
         mObservedView.animate().cancel();
         mObservedView.animate()
-                .x(mSwipeStack.getWidth())
+                .x(mSwipeStack.getWidth() + mObservedView.getX())
                 .rotation(mRotateDegrees)
+                .alpha(0f)
                 .setDuration(duration)
                 .setListener(new AnimationUtils.AnimationEndListener() {
                     @Override
@@ -154,10 +159,12 @@ public class SwipeHelper implements View.OnTouchListener {
                 });
     }
 
-    public void registerObservedView(View view) {
+    public void registerObservedView(View view, float initialX, float initialY) {
         if (view == null) return;
         mObservedView = view;
         mObservedView.setOnTouchListener(this);
+        mInitialX = initialX;
+        mInitialY = initialY;
         mListenForTouchEvents = true;
     }
 
