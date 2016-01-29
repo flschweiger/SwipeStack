@@ -89,7 +89,8 @@ public class SwipeStack extends ViewGroup {
             mNumberOfStackedViews =
                     attrs.getInt(R.styleable.SwipeStack_stack_size, DEFAULT_STACK_SIZE);
             mViewSpacing =
-                    attrs.getInt(R.styleable.SwipeStack_stack_spacing, DEFAULT_STACK_SPACING);
+                    attrs.getDimensionPixelSize(R.styleable.SwipeStack_stack_spacing,
+                            DEFAULT_STACK_SPACING);
             mViewRotation =
                     attrs.getInt(R.styleable.SwipeStack_stack_rotation, DEFAULT_STACK_ROTATION);
             mSwipeRotation =
