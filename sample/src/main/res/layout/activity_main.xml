@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,7 +13,8 @@
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|left"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
         android:text="@string/swipe_left"/>
 
     <Button
@@ -21,13 +22,15 @@
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:text="@string/swipe_right"/>
 
     <link.fls.SwipeStack
         android:id="@+id/swipeStack"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/swipe_stack_height"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/buttonSwipeLeft"
         android:padding="@dimen/padding_swipestack"
         app:stack_rotation="10"
         app:stack_size="3"/>
@@ -47,4 +50,4 @@
 
     </android.support.design.widget.CoordinatorLayout>
 
-</FrameLayout>
+</RelativeLayout>
