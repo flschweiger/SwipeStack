@@ -30,7 +30,7 @@ A simple, customizable and easy to use swipeable view stack for Android.
 
 ```java
 dependencies {
-    compile 'link.fls:swipestack:0.1.0'
+    compile 'link.fls:swipestack:0.2.0'
 }
 ```
 
