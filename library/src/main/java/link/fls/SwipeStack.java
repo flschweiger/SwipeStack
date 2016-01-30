@@ -35,7 +35,6 @@ public class SwipeStack extends ViewGroup {
 
     public static final int DEFAULT_ANIMATION_DURATION = 300;
     public static final int DEFAULT_STACK_SIZE = 3;
-    public static final int DEFAULT_STACK_SPACING = 30;
     public static final int DEFAULT_STACK_ROTATION = 8;
     public static final float DEFAULT_SWIPE_ROTATION = 30f;
     public static final float DEFAULT_SWIPE_OPACITY = 1f;
@@ -90,7 +89,7 @@ public class SwipeStack extends ViewGroup {
                     attrs.getInt(R.styleable.SwipeStack_stack_size, DEFAULT_STACK_SIZE);
             mViewSpacing =
                     attrs.getDimensionPixelSize(R.styleable.SwipeStack_stack_spacing,
-                            DEFAULT_STACK_SPACING);
+                            getResources().getDimensionPixelSize(R.dimen.default_stack_spacing));
             mViewRotation =
                     attrs.getInt(R.styleable.SwipeStack_stack_rotation, DEFAULT_STACK_ROTATION);
             mSwipeRotation =
