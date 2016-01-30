@@ -13,7 +13,7 @@ A simple, customizable and easy to use swipeable view stack for Android.
 
 `stack_size` specifies the maximum number of visible views. *Default: 3*
 
-`stack_spacing` specifies the vertical distance between two views. *Default: 10px*
+`stack_spacing` specifies the vertical distance between two views. *Default: 12dp*
 
 `stack_rotation` specifies the maximum random ratation (in degrees) of a card on the stack. *Default: 8*
 
@@ -30,7 +30,7 @@ A simple, customizable and easy to use swipeable view stack for Android.
 
 ```java
 dependencies {
-    compile 'link.fls:swipestack:0.2.0'
+    compile 'link.fls:swipestack:0.3.0'
 }
 ```
 
