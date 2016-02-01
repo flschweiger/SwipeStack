@@ -1,6 +1,10 @@
 # SwipeStack
 A simple, customizable and easy to use swipeable view stack for Android.
 
+[![Download](https://api.bintray.com/packages/flschweiger/maven/swipestack/images/download.svg) ](https://bintray.com/flschweiger/maven/swipestack/_latestVersion) 
+[![License Apache](https://img.shields.io/badge/license-Apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-SwipeStack-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/3079)
+
 ![Demo screen 1](https://raw.githubusercontent.com/flschweiger/SwipeStack/master/art/screen1.png)
 ![Demo animation](https://raw.githubusercontent.com/flschweiger/SwipeStack/master/art/demo.gif)
 ![Demo screen 2](https://raw.githubusercontent.com/flschweiger/SwipeStack/master/art/screen2.png)  
