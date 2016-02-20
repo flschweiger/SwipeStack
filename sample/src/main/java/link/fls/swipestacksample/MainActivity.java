@@ -35,7 +35,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import link.fls.SwipeStack;
+import link.fls.swipestack.SwipeStack;
 
 public class MainActivity extends AppCompatActivity implements SwipeStack.SwipeStackListener, View.OnClickListener {
 

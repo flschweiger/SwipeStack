@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package link.fls;
+package link.fls.swipestack;
 
 import android.content.Context;
 import android.content.res.TypedArray;

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package link.fls;
+package link.fls.swipestack;
 
 import android.animation.Animator;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 
-import link.fls.util.AnimationUtils;
+import link.fls.swipestack.util.AnimationUtils;
 
 public class SwipeHelper implements View.OnTouchListener {
 

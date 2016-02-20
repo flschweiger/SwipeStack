@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package link.fls.util;
+package link.fls.swipestack.util;
 
 import android.animation.Animator;
 
