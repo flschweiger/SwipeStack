@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="SwipeStack">
+        <attr name="allowed_swipe_directions" format="integer">
+            <enum name="only_left" value="1"/>
+            <enum name="only_right" value="2"/>
+            <enum name="both" value="0"/>
+        </attr>
         <attr name="animation_duration" format="integer"/>
         <attr name="stack_size" format="integer"/>
         <attr name="stack_spacing" format="dimension"/>

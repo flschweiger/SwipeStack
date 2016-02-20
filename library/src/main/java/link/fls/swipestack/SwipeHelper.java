@@ -45,10 +45,13 @@ public class SwipeHelper implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (!mListenForTouchEvents) return false;
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                if(!mListenForTouchEvents || !mSwipeStack.isEnabled()) {
+                    return false;
+                }
+
                 v.getParent().requestDisallowInterceptTouchEvent(true);
                 mSwipeStack.onSwipeStart();
                 mPointerId = event.getPointerId(0);
@@ -101,13 +104,20 @@ public class SwipeHelper implements View.OnTouchListener {
     }
 
     private void checkViewPosition() {
+        if(!mSwipeStack.isEnabled()) {
+            resetViewPosition();
+            return;
+        }
+
         float viewCenterHorizontal = mObservedView.getX() + (mObservedView.getWidth() / 2);
         float parentFirstThird = mSwipeStack.getWidth() / 3f;
         float parentLastThird = parentFirstThird * 2;
 
-        if (viewCenterHorizontal < parentFirstThird) {
+        if (viewCenterHorizontal < parentFirstThird &&
+                mSwipeStack.getAllowedSwipeDirections() != SwipeStack.SWIPE_DIRECTION_ONLY_RIGHT) {
             swipeViewToLeft(mAnimationDuration / 2);
-        } else if (viewCenterHorizontal > parentLastThird) {
+        } else if (viewCenterHorizontal > parentLastThird &&
+                mSwipeStack.getAllowedSwipeDirections() != SwipeStack.SWIPE_DIRECTION_ONLY_LEFT) {
             swipeViewToRight(mAnimationDuration / 2);
         } else {
             resetViewPosition();

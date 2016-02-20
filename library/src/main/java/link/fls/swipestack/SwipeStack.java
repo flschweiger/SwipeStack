@@ -33,6 +33,10 @@ import java.util.Random;
 
 public class SwipeStack extends ViewGroup {
 
+    public static final int SWIPE_DIRECTION_BOTH = 0;
+    public static final int SWIPE_DIRECTION_ONLY_LEFT = 1;
+    public static final int SWIPE_DIRECTION_ONLY_RIGHT = 2;
+
     public static final int DEFAULT_ANIMATION_DURATION = 300;
     public static final int DEFAULT_STACK_SIZE = 3;
     public static final int DEFAULT_STACK_ROTATION = 8;
@@ -47,6 +51,7 @@ public class SwipeStack extends ViewGroup {
     private Adapter mAdapter;
     private Random mRandom;
 
+    private int mAllowedSwipeDirections;
     private int mAnimationDuration;
     private int mCurrentViewIndex;
     private int mNumberOfStackedViews;
@@ -82,6 +87,9 @@ public class SwipeStack extends ViewGroup {
         TypedArray attrs = getContext().obtainStyledAttributes(attributeSet, R.styleable.SwipeStack);
 
         try {
+            mAllowedSwipeDirections =
+                    attrs.getInt(R.styleable.SwipeStack_allowed_swipe_directions,
+                            SWIPE_DIRECTION_BOTH);
             mAnimationDuration =
                     attrs.getInt(R.styleable.SwipeStack_animation_duration,
                             DEFAULT_ANIMATION_DURATION);
@@ -332,6 +340,25 @@ public class SwipeStack extends ViewGroup {
         if (mAdapter != null) mAdapter.unregisterDataSetObserver(mDataObserver);
         mAdapter = adapter;
         mAdapter.registerDataSetObserver(mDataObserver);
+    }
+
+    /**
+     * Returns the allowed swipe directions.
+     *
+     * @return The currently allowed swipe directions.
+     */
+    public int getAllowedSwipeDirections() {
+        return mAllowedSwipeDirections;
+    }
+
+    /**
+     * Sets the allowed swipe directions.
+     *
+     * @param directions One of {@link #SWIPE_DIRECTION_BOTH},
+     *                   {@link #SWIPE_DIRECTION_ONLY_LEFT}, or {@link #SWIPE_DIRECTION_ONLY_RIGHT}.
+     */
+    public void setAllowedSwipeDirections(int directions) {
+        mAllowedSwipeDirections = directions;
     }
 
     /**
