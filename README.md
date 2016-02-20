@@ -13,6 +13,8 @@ A simple, customizable and easy to use swipeable view stack for Android.
 
 *All attributes are optional.*
 
+`allowed_swipe_directions` specifies the allowed swipe directions. *Default: both*
+
 `animation_duration` specifies the duration of the animations. *Default: 300ms*
 
 `stack_size` specifies the maximum number of visible views. *Default: 3*
@@ -34,7 +36,7 @@ A simple, customizable and easy to use swipeable view stack for Android.
 
 ```java
 dependencies {
-    compile 'link.fls:swipestack:0.2.1'
+    compile 'link.fls:swipestack:0.3.0'
 }
 ```
 
@@ -53,7 +55,7 @@ dependencies {
     android:layout_height="match_parent"
     android:clipChildren="false">
 
-    <link.fls.swipestack
+    <link.fls.swipestack.SwipeStack
         android:id="@+id/swipeStack"
         android:layout_width="320dp"
         android:layout_height="240dp"
