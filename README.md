@@ -9,28 +9,6 @@ A simple, customizable and easy to use swipeable view stack for Android.
 ![Demo animation](https://raw.githubusercontent.com/flschweiger/SwipeStack/master/art/demo.gif)
 ![Demo screen 2](https://raw.githubusercontent.com/flschweiger/SwipeStack/master/art/screen2.png)  
 
-## Attributes ##
-
-*All attributes are optional.*
-
-`allowed_swipe_directions` specifies the allowed swipe directions. *Default: both*
-
-`animation_duration` specifies the duration of the animations. *Default: 300ms*
-
-`stack_size` specifies the maximum number of visible views. *Default: 3*
-
-`stack_spacing` specifies the vertical distance between two views. *Default: 12dp*
-
-`stack_rotation` specifies the maximum random ratation (in degrees) of a card on the stack. *Default: 8*
-
-`swipe_rotation` specifies the rotation (in degrees) of the view when it gets swiped left / right. *Default: 15*
-
-`swipe_opacity` specifies the opacity of the view when it gets swiped left / right. *Default: 1.0*
-
-`scale_factor` specifies the scale factor of the views in the stack. *Default: 1.0*
-
-`disable_hw_acceleration` set to `true` disables hardware acceleration. *Default: false*
-
 ## QuickStart ##
 ### Include the Gradle dependency ###
 
@@ -41,7 +19,7 @@ dependencies {
 ```
 
 ### Use it in your layout file ###
-1. Use the `link.fls.swipestack` view in your XML layout file 
+1. Use the `link.fls.swipestack.SwipeStack` view in your XML layout file 
 2. Set the parent view's `clipChildren` attribute to `false`
 
 *Example:*
@@ -117,6 +95,35 @@ swipeStack.setAdapter(new SwipeStackAdapter(mData));
 ```
 
 That's it!
+
+## Callbacks ##
+
+Currently SwipeStack implements the following callbacks:
+
+- the ` SwipeStackListener ` notifies you when a view was swiped to the left / right or when the stack becomes empty.
+- the ` SwipeProgressListener ` notifies you about the progress when the user starts / stops dragging a view around.
+
+## Attributes ##
+
+*All attributes are optional.*
+
+`allowed_swipe_directions` specifies the allowed swipe directions. *Default: both*
+
+`animation_duration` specifies the duration of the animations. *Default: 300ms*
+
+`stack_size` specifies the maximum number of visible views. *Default: 3*
+
+`stack_spacing` specifies the vertical distance between two views. *Default: 12dp*
+
+`stack_rotation` specifies the maximum random ratation (in degrees) of a card on the stack. *Default: 8*
+
+`swipe_rotation` specifies the rotation (in degrees) of the view when it gets swiped left / right. *Default: 15*
+
+`swipe_opacity` specifies the opacity of the view when it gets swiped left / right. *Default: 1.0*
+
+`scale_factor` specifies the scale factor of the views in the stack. *Default: 1.0*
+
+`disable_hw_acceleration` set to `true` disables hardware acceleration. *Default: false*
 
 ## Copyright Notice ##
 ``` 
