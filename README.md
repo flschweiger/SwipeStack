@@ -125,6 +125,8 @@ Currently SwipeStack implements the following callbacks:
 
 `disable_hw_acceleration` set to `true` disables hardware acceleration. *Default: false*
 
+`looped` set to `true` enables looping. *Default: false*
+
 ## Copyright Notice ##
 ``` 
 Copyright (C) 2016 Frederik Schweiger
