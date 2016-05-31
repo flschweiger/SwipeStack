@@ -310,13 +310,15 @@ public class SwipeStack extends ViewGroup {
     }
 
     public void onViewSwipedToLeft() {
-        if (mListener != null) mListener.onViewSwipedToRight(getCurrentPosition());
+        int swipedPosition = getCurrentPosition();
         removeTopView();
+        if (mListener != null) mListener.onViewSwipedToRight(swipedPosition);
     }
 
     public void onViewSwipedToRight() {
-        if (mListener != null) mListener.onViewSwipedToRight(getCurrentPosition());
+        int swipedPosition = getCurrentPosition();
         removeTopView();
+        if (mListener != null) mListener.onViewSwipedToRight(swipedPosition);
     }
 
     /**
