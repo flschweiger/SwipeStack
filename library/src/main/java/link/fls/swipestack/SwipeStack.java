@@ -44,6 +44,7 @@ public class SwipeStack extends ViewGroup {
     public static final float DEFAULT_SWIPE_OPACITY = 1f;
     public static final float DEFAULT_SCALE_FACTOR = 1f;
     public static final boolean DEFAULT_DISABLE_HW_ACCELERATION = true;
+    public static final boolean DEFAULT_IS_LOOPED = false;
 
     private static final String KEY_SUPER_STATE = "superState";
     private static final String KEY_CURRENT_INDEX = "currentIndex";
@@ -53,7 +54,7 @@ public class SwipeStack extends ViewGroup {
 
     private int mAllowedSwipeDirections;
     private int mAnimationDuration;
-    private int mCurrentViewIndex;
+    private int mCurrentIndex;
     private int mNumberOfStackedViews;
     private int mViewSpacing;
     private int mViewRotation;
@@ -62,6 +63,7 @@ public class SwipeStack extends ViewGroup {
     private float mScaleFactor;
     private boolean mDisableHwAcceleration;
     private boolean mIsFirstLayout = true;
+    private boolean mIsLooped;
 
     private View mTopView;
     private SwipeHelper mSwipeHelper;
@@ -109,6 +111,9 @@ public class SwipeStack extends ViewGroup {
             mDisableHwAcceleration =
                     attrs.getBoolean(R.styleable.SwipeStack_disable_hw_acceleration,
                             DEFAULT_DISABLE_HW_ACCELERATION);
+            mIsLooped =
+                    attrs.getBoolean(R.styleable.SwipeStack_looped,
+                            DEFAULT_IS_LOOPED);
         } finally {
             attrs.recycle();
         }
@@ -139,7 +144,7 @@ public class SwipeStack extends ViewGroup {
     public Parcelable onSaveInstanceState() {
         Bundle bundle = new Bundle();
         bundle.putParcelable(KEY_SUPER_STATE, super.onSaveInstanceState());
-        bundle.putInt(KEY_CURRENT_INDEX, mCurrentViewIndex - getChildCount());
+        bundle.putInt(KEY_CURRENT_INDEX, mCurrentIndex - getChildCount());
         return bundle;
     }
 
@@ -147,24 +152,28 @@ public class SwipeStack extends ViewGroup {
     public void onRestoreInstanceState(Parcelable state) {
         if (state instanceof Bundle) {
             Bundle bundle = (Bundle) state;
-            mCurrentViewIndex = bundle.getInt(KEY_CURRENT_INDEX);
+            mCurrentIndex = bundle.getInt(KEY_CURRENT_INDEX);
             state = bundle.getParcelable(KEY_SUPER_STATE);
         }
 
         super.onRestoreInstanceState(state);
     }
 
+    private int getCurrentViewIndex() {
+        return mCurrentIndex % mAdapter.getCount();
+    }
+
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
 
         if (mAdapter == null || mAdapter.isEmpty()) {
-            mCurrentViewIndex = 0;
+            mCurrentIndex = 0;
             removeAllViewsInLayout();
             return;
         }
 
         for (int x = getChildCount();
-             x < mNumberOfStackedViews && mCurrentViewIndex < mAdapter.getCount();
+             x < mNumberOfStackedViews && (mIsLooped || mCurrentIndex < mAdapter.getCount());
              x++) {
             addNextView();
         }
@@ -175,8 +184,8 @@ public class SwipeStack extends ViewGroup {
     }
 
     private void addNextView() {
-        if (mCurrentViewIndex < mAdapter.getCount()) {
-            View bottomView = mAdapter.getView(mCurrentViewIndex, null, this);
+        if (getCurrentViewIndex() < mAdapter.getCount()) {
+            View bottomView = mAdapter.getView(getCurrentViewIndex(), null, this);
             bottomView.setTag(R.id.new_view, true);
 
             if (!mDisableHwAcceleration) {
@@ -211,7 +220,7 @@ public class SwipeStack extends ViewGroup {
             bottomView.measure(measureSpecWidth | width, measureSpecHeight | height);
             addViewInLayout(bottomView, 0, params, true);
 
-            mCurrentViewIndex++;
+            mCurrentIndex++;
         }
     }
 
@@ -301,13 +310,15 @@ public class SwipeStack extends ViewGroup {
     }
 
     public void onViewSwipedToLeft() {
-        if (mListener != null) mListener.onViewSwipedToLeft(getCurrentPosition());
+        int swipedPosition = getCurrentPosition();
         removeTopView();
+        if (mListener != null) mListener.onViewSwipedToRight(swipedPosition);
     }
 
     public void onViewSwipedToRight() {
-        if (mListener != null) mListener.onViewSwipedToRight(getCurrentPosition());
+        int swipedPosition = getCurrentPosition();
         removeTopView();
+        if (mListener != null) mListener.onViewSwipedToRight(swipedPosition);
     }
 
     /**
@@ -316,7 +327,7 @@ public class SwipeStack extends ViewGroup {
      * @return The current position.
      */
     public int getCurrentPosition() {
-        return mCurrentViewIndex - getChildCount();
+        return (mCurrentIndex - getChildCount()) % mAdapter.getCount();
     }
 
     /**
@@ -410,7 +421,7 @@ public class SwipeStack extends ViewGroup {
      * Resets the current adapter position and repopulates the stack.
      */
     public void resetStack() {
-        mCurrentViewIndex = 0;
+        mCurrentIndex = 0;
         removeAllViewsInLayout();
         requestLayout();
     }
