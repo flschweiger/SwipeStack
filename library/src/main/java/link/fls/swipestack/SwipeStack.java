@@ -44,6 +44,7 @@ public class SwipeStack extends ViewGroup {
     public static final float DEFAULT_SWIPE_OPACITY = 1f;
     public static final float DEFAULT_SCALE_FACTOR = 1f;
     public static final boolean DEFAULT_DISABLE_HW_ACCELERATION = true;
+    public static final boolean DEFAULT_STACK_ORDER_TOP = false;
 
     private static final String KEY_SUPER_STATE = "superState";
     private static final String KEY_CURRENT_INDEX = "currentIndex";
@@ -61,6 +62,7 @@ public class SwipeStack extends ViewGroup {
     private float mSwipeOpacity;
     private float mScaleFactor;
     private boolean mDisableHwAcceleration;
+    private boolean mStackOrderTop;
     private boolean mIsFirstLayout = true;
 
     private View mTopView;
@@ -109,6 +111,9 @@ public class SwipeStack extends ViewGroup {
             mDisableHwAcceleration =
                     attrs.getBoolean(R.styleable.SwipeStack_disable_hw_acceleration,
                             DEFAULT_DISABLE_HW_ACCELERATION);
+            mStackOrderTop =
+                    attrs.getBoolean(R.styleable.SwipeStack_stack_order_top,
+                            DEFAULT_STACK_ORDER_TOP);
         } finally {
             attrs.recycle();
         }
@@ -222,7 +227,7 @@ public class SwipeStack extends ViewGroup {
 
             int distanceToViewAbove = (topViewIndex * mViewSpacing) - (x * mViewSpacing);
             int newPositionX = (getWidth() - childView.getMeasuredWidth()) / 2;
-            int newPositionY = distanceToViewAbove + getPaddingTop();
+            int newPositionY = mStackOrderTop ? -distanceToViewAbove + getPaddingTop() : distanceToViewAbove + getPaddingTop();
 
             childView.layout(
                     newPositionX,
