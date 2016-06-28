@@ -14,5 +14,6 @@
         <attr name="swipe_opacity" format="float"/>
         <attr name="scale_factor" format="float"/>
         <attr name="disable_hw_acceleration" format="boolean"/>
+        <attr name="stack_order_top" format="boolean" />
     </declare-styleable>
 </resources>
