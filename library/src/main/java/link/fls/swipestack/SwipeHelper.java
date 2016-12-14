@@ -17,9 +17,14 @@
 package link.fls.swipestack;
 
 import android.animation.Animator;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.animation.OvershootInterpolator;
+
+import java.util.Calendar;
 
 import link.fls.swipestack.util.AnimationUtils;
 
@@ -27,14 +32,14 @@ public class SwipeHelper implements View.OnTouchListener {
 
     private final SwipeStack mSwipeStack;
     private View mObservedView;
-
     private boolean mListenForTouchEvents;
     private float mDownX;
     private float mDownY;
     private float mInitialX;
     private float mInitialY;
     private int mPointerId;
-
+    private float x1;
+    private float y1;
     private float mRotateDegrees = SwipeStack.DEFAULT_SWIPE_ROTATION;
     private float mOpacityEnd = SwipeStack.DEFAULT_SWIPE_OPACITY;
     private int mAnimationDuration = SwipeStack.DEFAULT_ANIMATION_DURATION;
@@ -45,19 +50,19 @@ public class SwipeHelper implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-
+        Log.d("EVENT",event+"");
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if(!mListenForTouchEvents || !mSwipeStack.isEnabled()) {
                     return false;
                 }
-
+                x1 = event.getX();
+                y1 = event.getY();
                 v.getParent().requestDisallowInterceptTouchEvent(true);
                 mSwipeStack.onSwipeStart();
                 mPointerId = event.getPointerId(0);
                 mDownX = event.getX(mPointerId);
                 mDownY = event.getY(mPointerId);
-
                 return true;
 
             case MotionEvent.ACTION_MOVE:
@@ -92,12 +97,24 @@ public class SwipeHelper implements View.OnTouchListener {
                 return true;
 
             case MotionEvent.ACTION_UP:
+                float x2 = event.getX();
+                float y2 = event.getY();
+                dx = x2 -x1;
+                dy = y2 -y1;
+                float MAX_CLICK_DISTANCE = 0.5f;
+                if(dx < MAX_CLICK_DISTANCE && dy < MAX_CLICK_DISTANCE &&
+                        dx >= 0 && dy >= 0){
+                    long clickDuration = event.getEventTime() -event.getDownTime();
+                    mSwipeStack.onClick();
+                    if(clickDuration > ViewConfiguration.getLongPressTimeout()){
+                        mSwipeStack.onLongClick(clickDuration);
+                    }
+                }
                 v.getParent().requestDisallowInterceptTouchEvent(false);
                 mSwipeStack.onSwipeEnd();
                 checkViewPosition();
 
                 return true;
-
         }
 
         return false;
@@ -205,5 +222,4 @@ public class SwipeHelper implements View.OnTouchListener {
     public void swipeViewToRight() {
         swipeViewToRight(mAnimationDuration);
     }
-
 }
