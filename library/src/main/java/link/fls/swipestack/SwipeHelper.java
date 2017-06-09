@@ -39,9 +39,6 @@ public class SwipeHelper implements View.OnTouchListener {
     private float mOpacityEnd = SwipeStack.DEFAULT_SWIPE_OPACITY;
     private int mAnimationDuration = SwipeStack.DEFAULT_ANIMATION_DURATION;
 
-    private boolean isClick = true;
-
-
     public SwipeHelper(SwipeStack swipeStack) {
         mSwipeStack = swipeStack;
     }
@@ -51,8 +48,6 @@ public class SwipeHelper implements View.OnTouchListener {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                isClick = true;
-
                 if (!mListenForTouchEvents || !mSwipeStack.isEnabled()) {
                     return false;
                 }
@@ -71,8 +66,6 @@ public class SwipeHelper implements View.OnTouchListener {
 
                 float dx = event.getX(pointerIndex) - mDownX;
                 float dy = event.getY(pointerIndex) - mDownY;
-
-                isClick = Math.abs(dx + dy) < SwipeStack.CLICK_DISTANCE_THRESHOLD;
 
                 float newX = mObservedView.getX() + dx;
                 float newY = mObservedView.getY() + dy;
@@ -99,7 +92,9 @@ public class SwipeHelper implements View.OnTouchListener {
                 return true;
 
             case MotionEvent.ACTION_UP:
-                if (isClick) {
+                dx = event.getX() - mDownX;
+                dy = event.getY() - mDownY;
+                if (Math.abs(dx + dy) <= SwipeStack.CLICK_DISTANCE_THRESHOLD) {
                     v.performClick();
                 }
 
