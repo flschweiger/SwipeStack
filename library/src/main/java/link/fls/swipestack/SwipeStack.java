@@ -44,6 +44,7 @@ public class SwipeStack extends ViewGroup {
     public static final float DEFAULT_SWIPE_OPACITY = 1f;
     public static final float DEFAULT_SCALE_FACTOR = 1f;
     public static final boolean DEFAULT_DISABLE_HW_ACCELERATION = true;
+    public static final float CLICK_DISTANCE_THRESHOLD = 0;
 
     private static final String KEY_SUPER_STATE = "superState";
     private static final String KEY_CURRENT_INDEX = "currentIndex";

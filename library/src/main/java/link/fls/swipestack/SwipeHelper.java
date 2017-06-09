@@ -48,7 +48,7 @@ public class SwipeHelper implements View.OnTouchListener {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if(!mListenForTouchEvents || !mSwipeStack.isEnabled()) {
+                if (!mListenForTouchEvents || !mSwipeStack.isEnabled()) {
                     return false;
                 }
 
@@ -92,6 +92,12 @@ public class SwipeHelper implements View.OnTouchListener {
                 return true;
 
             case MotionEvent.ACTION_UP:
+                dx = event.getX() - mDownX;
+                dy = event.getY() - mDownY;
+                if (Math.abs(dx + dy) <= SwipeStack.CLICK_DISTANCE_THRESHOLD) {
+                    v.performClick();
+                }
+
                 v.getParent().requestDisallowInterceptTouchEvent(false);
                 mSwipeStack.onSwipeEnd();
                 checkViewPosition();
@@ -104,7 +110,7 @@ public class SwipeHelper implements View.OnTouchListener {
     }
 
     private void checkViewPosition() {
-        if(!mSwipeStack.isEnabled()) {
+        if (!mSwipeStack.isEnabled()) {
             resetViewPosition();
             return;
         }
