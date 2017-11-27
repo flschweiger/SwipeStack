@@ -132,7 +132,12 @@ public class SwipeHelper implements View.OnTouchListener {
                 .alpha(1)
                 .setDuration(mAnimationDuration)
                 .setInterpolator(new OvershootInterpolator(1.4f))
-                .setListener(null);
+                .setListener(new AnimationUtils.AnimationEndListener() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mSwipeStack.onViewClicked();
+                    }
+                });
     }
 
     private void swipeViewToLeft(int duration) {
