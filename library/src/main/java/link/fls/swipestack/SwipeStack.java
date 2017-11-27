@@ -300,6 +300,10 @@ public class SwipeStack extends ViewGroup {
         if (mProgressListener != null) mProgressListener.onSwipeEnd(getCurrentPosition());
     }
 
+    public void onViewClicked() {
+        if (mListener != null) mListener.onViewClicked(getCurrentPosition());
+    }
+
     public void onViewSwipedToLeft() {
         if (mListener != null) mListener.onViewSwipedToLeft(getCurrentPosition());
         removeTopView();
@@ -420,6 +424,13 @@ public class SwipeStack extends ViewGroup {
      * swiped to the left / right or when the stack gets empty.
      */
     public interface SwipeStackListener {
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param position The position of the view in the adapter currently in use.
+         */
+        void onViewClicked(int position);
+
         /**
          * Called when a view has been dismissed to the left.
          *
