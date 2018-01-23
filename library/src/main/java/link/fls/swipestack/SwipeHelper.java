@@ -19,6 +19,7 @@ package link.fls.swipestack;
 import android.animation.Animator;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
 import android.view.animation.OvershootInterpolator;
 
 import link.fls.swipestack.util.AnimationUtils;
@@ -138,15 +139,16 @@ public class SwipeHelper implements View.OnTouchListener {
     private void swipeViewToLeft(int duration) {
         if (!mListenForTouchEvents) return;
         mListenForTouchEvents = false;
-        mObservedView.animate().cancel();
-        mObservedView.animate()
-                .x(-mSwipeStack.getWidth() + mObservedView.getX())
+        final ViewPropertyAnimator animator = mObservedView.animate();
+        animator.cancel();
+        animator.x(-mSwipeStack.getWidth() + mObservedView.getX())
                 .rotation(-mRotateDegrees)
                 .alpha(0f)
                 .setDuration(duration)
                 .setListener(new AnimationUtils.AnimationEndListener() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
+                        animator.setListener(null);
                         mSwipeStack.onViewSwipedToLeft();
                     }
                 });
@@ -155,15 +157,16 @@ public class SwipeHelper implements View.OnTouchListener {
     private void swipeViewToRight(int duration) {
         if (!mListenForTouchEvents) return;
         mListenForTouchEvents = false;
-        mObservedView.animate().cancel();
-        mObservedView.animate()
-                .x(mSwipeStack.getWidth() + mObservedView.getX())
+        final ViewPropertyAnimator animator = mObservedView.animate();
+        animator.cancel();
+        animator.x(mSwipeStack.getWidth() + mObservedView.getX())
                 .rotation(mRotateDegrees)
                 .alpha(0f)
                 .setDuration(duration)
                 .setListener(new AnimationUtils.AnimationEndListener() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
+                        animator.setListener(null);
                         mSwipeStack.onViewSwipedToRight();
                     }
                 });
